@@ -1,139 +1,71 @@
-<div style="display: flex; align-items: center; justify-content: center; text-align: center; flex-direction: row;">
-  <img src="https://coursereport-s3-production.global.ssl.fastly.net/uploads/school/logo/219/original/CT_LOGO_NEW.jpg" width="100" style="margin-right: 10px;">
-<img src="https://www.designboom.com/wp-content/uploads/2023/03/we-love-nyc-new-logo-designboom-07-1.jpg
-" width="130" style="margin-right: 60px;">
-</div>
+# Higher Education Consulting Analytics: The Factors That Affect Graduation Rates
+## Project Purpose
+The purpose of this project is top look at how many aspects within the higher education sphere affect graduation rates, and strategies on how these differences can be addressed
+## Data Dictionary
+```
+College Name: The full name of that specific university 
+State: The US state that the university is in
+Public (1)/ Private (2): wether the school is public or private, represented by a number 1 or 2  
+appli. rec'd: The amount of applications that a university received            
+# appl. accepted: The amount of applications that a university accepted          
+# new stud. enrolled: The amount of new students that a unversity accepted      
+% new stud. from top 10%: A percentage of the amount of new students that university received if that student was from the top 10 percent in highschool
+% new stud. from top 25%: A percentage of the amount of new students that university received if that student was from the top 25 percent in highschool 
+# FT undergrad: The amount of Full Time Undergrads that the school has           
+# PT undergrad: The amount of Part Timr undergrads that the school has           
+in-state tuition: The cost of that schools in-state tuition
+out-of-state tuition: The cost of that schools out-of-state tuition      
+room: The cost of a dorm room for that school                     
+board: The cost of trhe meal plan for that school              
+add. fees: The cost of any additional fees that that school has              
+estim. book costs: an estimate of the cost for books for that school      
+estim. personal $: an estimate of the cost for personal items for that student       
+% fac. w/PHD: the percentage of faculty at that school that has a doctorate           
+stud./fac. ratio: The ratio of studenbts for every faculty member at that school        
+Graduation rate: The graduation rate at that school       
+Public or Private: Tells wether a school is poublic or private, but as a string	
+total cost (in state tuition): The total estimated cost of a student, if they paid for everything along with their in state tuition	for that school
+total cost (out of state tuition):	The total estimated cost of a student, if they paid for everything along with their out of state tuition for that school	
+Mean Tuition: The average tuition between in state tuition and out of state tuition for that school
+```
+## Summary
+### Handling NaN Values and Outliers
+- I handled NaN values in three different ways
+1. Imputing with the median: for columns that had few missing values and weren't about money 
+2. Imputting with the median by state: for columns that had many missing values or were about money
+3. imputting with a 0: specifically for the '% new stud. from top %10' and '% new stud. from top %25' columns
+- For outliers, I handled them with the IQR method
+**EX:**
+```python
+low_amount_x = df['Mean Tuition'].quantile(0.25)
+up_amount_x = df['Mean Tuition'].quantile(0.75)
+x_range_1 = up_amount_x - low_amount_x
+lower_bound_x = low_amount_x - 1.5 * x_range_1
+upper_bound_x = up_amount_x + 1.5 * x_range_1
 
-> 
-# <span style="color:#4CCFA2">Project - Higher Education Consulting Analytics</span> 🏫
+low_amount_y = df['Graduation rate'].quantile(0.25)
+up_amount_y = df['Graduation rate'].quantile(0.75)
+y_range = up_amount_y - low_amount_y
+lower_bound_y = low_amount_y - 1.5 * y_range
+upper_bound_y = up_amount_y + 1.5 * y_range
 
----
-
-## Scenario
-
-This was a real take-home technical assessment that has been given to data analysts during an interview process. The goal is to assess their ability to perform analysis on a provided dataset. The scenario given stated: "You are working with a firm that provides consulting services for institutions of higher learning. The team has gathered some data about a number of schools, and they are hoping you can identify some meaningful insights that could help them as they advise various colleges and universities this year."
-
-## Task
-
-Analyze this dataset of American college and university undergraduate programs.
-
-
-## Specifications
-
-1. Discover & visualize the dataset to get insights. Include some key visuals and written conclusions.
-2. Report on relevant statistics.
-3. Discuss your steps for cleaning the data.
-4. Explain how you identify outliers and what you do with that information.
-5. Explain how you approach missing values in the data.
-
-
-
-## Deliverables
-
-1. **Jupyter Notebook:**
-  - Submit a comprehensive Jupyter notebook containing your analysis. Ensure that your notebook is well-organized with a combination of code cells and markdown cells. Use markdown cells for explanations, interpretations, and any additional context. Utilize code comments to explain complex or critical sections of your code. Make sure your code is clear and readable.
-
-2. **Visualizations:**
-  - Include a minimum of 7 visualizations in your Jupyter notebook. These visualizations should be relevant to your analysis and help convey insights. Consider using a variety of chart types, such as bar charts, scatter plots, histograms, etc., to effectively represent different aspects of the data. Additionally, provide clear and concise captions and titles for each visualization.
-
-3. **Presentation:**
-  - Prepare a 5-7 minute presentation to showcase your key findings. Your presentation should cover the main points of your analysis and highlight important visualizations. Use the presentation to convey the story behind your data, emphasizing key trends, patterns, and insights. Once finished, please save this presentation as a PDF and add it to your repository.
-
-4. **Your own README.md:**
-  - The README.md for a data visualization project provides a brief overview of the project's purpose, datasets used, visualization methods, and final conclusions or recommendations. It acts as a guide to help users understand and engage with the project's visualizations and insights.
-
----
-
-### Tips for Presentation:
-
-- **Storytelling:**
-  - Structure your presentation like a story. Begin with an introduction, followed by the main findings, and conclude with any recommendations or notable insights.
-
-- **Engaging Visuals:**
-  - Display a mix of visualizations that are easy to understand. Clearly articulate the message behind each visualization during your presentation.
-
-- **Slide Templates:**
-  - Want to take your slide deck to the next level? I highly recommend you check out these resources for free templates for PowerPoint and Google Slides!
-     - [SlidesGo](https://slidesgo.com/)
-     - [Slides Carnival](https://www.slidescarnival.com/)
-     
-- **What Should You Include in Your Presentation?!**
-  - Take a look at the outline provided below.
-
----
-
-## Presentation Outline
-
-### Slide 1: Introduction
-- **Title:** [Your Analysis Title]
-- **Subtitle:** [Optional - Additional information or tagline]
-- **Presented by:** [Your Name]
-
----
-
-### Slide 2: Background
-- **Introduction to the Dataset:**
-   - Briefly introduce the dataset you are working with.
-   - Mention the source of the data and any relevant details about its collection.
-
-- **Background Information:**
-   - If applicable, provide background information on the subject matter.
-   - Include any relevant industry trends, historical context, or background knowledge.
-
----
-
-### Slide 3: Purpose
-- **Purpose of the Analysis:**
-   - Clearly state the purpose or goal of your analysis.
-   - Explain why this analysis is important or what insights you aim to gain.
-
-- **Relevance to the Audience:**
-   - Explain why the analysis matters to your audience.
-   - Consider the potential impact of your findings or how they might inform decision-making.
-
----
-
-### Slide 4: Data Overview
-- **Dataset Size:** [Number of rows and columns]
-- **Key Features:** Highlight important columns
-
----
-
-### Slide 5-11+: Exploratory Data Analysis (EDA)
-These are just ideas! Include visualizations you would like.
-- **Viz 1:** [Include a visualization]
-- **Viz 2:** [Include a visualization]
-- **Viz 3:** [Include a visualization]
-- ... [Additional EDA visualizations]
-
----
-
-### Slide 12: Recommendations & Conclusion
-- **Actionable Insights:** Suggest actionable steps based on findings
-- **Summary:** Recap key findings
-- **Closing Thoughts:** Conclude with final remarks
-- **Next Steps:** Mention any further steps or areas for future exploration
-
----
-
-### Slide 13: Thank You
-- **Acknowledgment:** Thank your audience for their time, ask if there are any questions
-
-
----
-
-## Grading Rubric (Out of 20 Points)
-
-| **Category**                      | **Description**                                                                                                                                              | **Points** |
-|------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
-| **Exploratory Data Analysis (EDA)**| Clear and detailed exploration of the dataset, identifying key patterns, trends, and outliers. Includes at least 7 meaningful and well-designed visualizations. | 5          |
-| **Data Cleaning**                  | Thorough explanation of the data cleaning process, handling missing values, outliers, and irrelevant information effectively.                                   | 3          |
-| **Statistical Analysis**           | Insightful reporting on key statistics and metrics that help draw conclusions from the dataset.                                                                | 3          |
-| **Jupyter Notebook Organization**  | Notebook is well-structured with a balance of markdown explanations and clearly commented code. All deliverables are included.                                  | 3          |
-| **Presentation Quality**           | Engaging and clear 5-7 minute presentation that tells a story, uses visuals effectively, and communicates key findings clearly.                                 | 3          |
-| **Recommendations & Insights**     | Actionable insights and recommendations based on the analysis, with thoughtful explanations to support conclusions.                                             | 3          |
-
----
-
-### Total: **/20**
-
+df_cleaned = df[(df['Mean Tuition'] >= lower_bound_x) & (df['Mean Tuition'] <= upper_bound_x) &
+                (df['Graduation rate'] >= lower_bound_y) & (df['Graduation rate'] <= upper_bound_y)]
+```
+This ensured that for some of my key visualizations, I wouldn't have outliers
+### key visuals
+1. **[heatmap of correlation](Heatmap_of_Correlation.png)** a heatmap which shows the correlations between different numerical columns, this was helpful particularly when I was develoiping my questions and starting with my analysis
+2. **[public or private grad rate](Graduation_Rate_by_School.png)** a barplot that shows the median graduation rates by wether the school was public or private, helpful as it showed that private schools usually have higher graduation rates that public schools
+3. **[no outliers](Correlation_of_Tuition_and_Graduation_Rates.png)** **[with outliers](Correlation_of_Tuition_and_Graduation_Rate(with_Outliers).png)** 2 regplots that show the correlation between the graduation rate and the mean tuition. shows that there is a moderatly strong correlation between the two fields. one of them had outliers left in to show why I excluded them in the first place (impossible statistic)
+4. **[no outliers](Graduation_Rates_by_SF_Ratio.png)** **[with outliers](Graduation_Rates_By_SF_Ratio(with_Outliers).png)** 2 scatter plots that show the graduation rate by the student faculty ratio and wether the school is public or private. it shows that public schools have higher student faculty ratios, but lower graduation rates than private schools. one of them shows why i left out the outliers (impossible statistic, again)
+5. **[grad rate by state](Graduation_Rate_by_State.png)** a barplot which shows the graduation rate by each state. important as it shows that certain states have worse graduation rates than others.
+6. barplot that shows the amount of applicants received by state, shows which states are propular to apply to
+7. **[missing values](map_of_missing_values.png)** a heatmap that shows missing values. Good as it shows which columns have missing values, and how many missing values they have
+## conclusion
+#### my analysis was able to show that graduation rates are affected by many factors, specifically factors such as the State, the student facylty ratio, as well as the tuition price. With these insights, my recommendations to the universities as a whole is to...
+1. staff more individuals within public schools, and/or within private schools that are underperforming
+2. potentially consider staffing within states where the graduation rate is lower (such as New Mexico, Louisiana, and Nevada)
+3. offer more resources to schools that have lower graduation rates, and potentially schools that have lower tuition rates
+#### Other things to consider would be...
+1. How could you model the success of certain private schools within public schools, and underpreforming private schools?
+2. Tuition rates are really high in certain states, would it be possible to lower tuition rates without lowering graduation rates, or are tuition rates correlated with the amount of resources that a college can have access to?

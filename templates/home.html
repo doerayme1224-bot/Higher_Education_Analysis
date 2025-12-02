@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In-State Tuition Cost Prediction</title>
+</head>
+<body>
+    <h1>In-State Tuition Cost Prediction</h1>
+    <form action="/predict" method="POST">
+        <label for="Public (1)/ Private (2)">Public (1), or Private (2):</label>
+        <input type="text" name="Public (1)/ Private (2)" required><br>
+        <label for="board">Board (Meal Plan Cost):</label>
+        <input type="text" name="board" required><br>
+        <label for="Graduation rate">Graduation Rate(as Percent):</label>
+        <input type="text" name="Graduation rate" required><br>
+        <label for="% new stud. from top 10%">Number of New Students from Top 10 Percent:</label>
+        <input type="text" name="% new stud. from top 10%" required><br>
+        <label for="% new stud. from top 25%">Number of New Students from Top 25 Percent:</label>
+        <input type="text" name="% new stud. from top 25%" required><br>
+        <label for="room">Room (Dorm Cost):</label>
+        <input type="text" name="room" required><br>
+        <label for="stud./fac. ratio">Student Faculty Ratio (as Percent):</label>
+        <input type="text" name="stud./fac. ratio" required><br>
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction_test %}
+        <h2>{{ prediction_test }}</h2>
+    {% endif %}
+</body>
+</html>

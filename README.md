@@ -1,6 +1,6 @@
 # Higher Education Consulting Analytics: The Factors That Affect Graduation Rates
 ## Project Purpose
-The purpose of this project is top look at how many aspects within the higher education sphere affect graduation rates, and strategies on how these differences can be addressed
+The purpose of this project is to develop a model which can predict the cost of in-state tuition for a school in the USA based on a couple of factors.
 ## Data Dictionary
 ```
 College Name: The full name of that specific university 
@@ -30,42 +30,55 @@ Mean Tuition: The average tuition between in state tuition and out of state tuit
 ```
 ## Summary
 ### Handling NaN Values and Outliers
-- I handled NaN values in three different ways
-1. Imputing with the median: for columns that had few missing values and weren't about money 
-2. Imputting with the median by state: for columns that had many missing values or were about money
-3. imputting with a 0: specifically for the '% new stud. from top %10' and '% new stud. from top %25' columns
-- For outliers, I handled them with the IQR method
+- I handled NaN values by...
+1. dropping them, I didn't want synthetic data to manipulate the performance of my model
 **EX:**
 ```python
-low_amount_x = df['Mean Tuition'].quantile(0.25)
-up_amount_x = df['Mean Tuition'].quantile(0.75)
-x_range_1 = up_amount_x - low_amount_x
-lower_bound_x = low_amount_x - 1.5 * x_range_1
-upper_bound_x = up_amount_x + 1.5 * x_range_1
-
-low_amount_y = df['Graduation rate'].quantile(0.25)
-up_amount_y = df['Graduation rate'].quantile(0.75)
-y_range = up_amount_y - low_amount_y
-lower_bound_y = low_amount_y - 1.5 * y_range
-upper_bound_y = up_amount_y + 1.5 * y_range
-
-df_cleaned = df[(df['Mean Tuition'] >= lower_bound_x) & (df['Mean Tuition'] <= upper_bound_x) &
-                (df['Graduation rate'] >= lower_bound_y) & (df['Graduation rate'] <= upper_bound_y)]
+#1: dropping all the na values and saving them in a variable
+sub = df.dropna()
+#2: turning that subset into a csv with `to_csv`
+sub.to_csv('data/cleaned_universities.csv')
 ```
-This ensured that for some of my key visualizations, I wouldn't have outliers
+**important to convert to a csv for later ease of use.**
 ### key visuals
-1. **[heatmap of correlation](Heatmap_of_Correlation.png)** a heatmap which shows the correlations between different numerical columns, this was helpful particularly when I was develoiping my questions and starting with my analysis
-2. **[public or private grad rate](Graduation_Rate_by_School.png)** a barplot that shows the median graduation rates by wether the school was public or private, helpful as it showed that private schools usually have higher graduation rates that public schools
-3. **[no outliers](Correlation_of_Tuition_and_Graduation_Rates.png)** **[with outliers](Correlation_of_Tuition_and_Graduation_Rate(with_Outliers).png)** 2 regplots that show the correlation between the graduation rate and the mean tuition. shows that there is a moderatly strong correlation between the two fields. one of them had outliers left in to show why I excluded them in the first place (impossible statistic)
-4. **[no outliers](Graduation_Rates_by_SF_Ratio.png)** **[with outliers](Graduation_Rates_By_SF_Ratio(with_Outliers).png)** 2 scatter plots that show the graduation rate by the student faculty ratio and wether the school is public or private. it shows that public schools have higher student faculty ratios, but lower graduation rates than private schools. one of them shows why i left out the outliers (impossible statistic, again)
-5. **[grad rate by state](Graduation_Rate_by_State.png)** a barplot which shows the graduation rate by each state. important as it shows that certain states have worse graduation rates than others.
-6. barplot that shows the amount of applicants received by state, shows which states are propular to apply to
-7. **[missing values](map_of_missing_values.png)** a heatmap that shows missing values. Good as it shows which columns have missing values, and how many missing values they have
+#### 1. A heatmap of Correlations of In-State Tuition
+![heatmap of correlation](Model_Visuals/correlation_of_tuition_and_features.png)
+**a heatmap which shows the correlations between different numerical columns, this was helpful when it came to selecting features in order to create the model**
+#### 2. A Scatterplot of Tuition and Board Costs
+![Scatter plot](Model_Visuals/in_state_tuition_by_board.png) 
+**a scatterplot that shows the cost of in-state tuition by the board cost, and they are grouped by wether the school is public or private. shows us that public schools have lower in-state tuition costs than private schools, but the cost betwen the Board isn't to different between public and private schools (private schools do however appear to have a higher board cost on average compared to public schools)**
+#### 3. A Scatterplot of Tuition and Student Faculty Ratio's
+![scatter plot 2](Model_Visuals/in_state_tuition_by_student_faculty_ratio.png) 
+**A Scatterplot showing the cost of in-state tuition by the student faculty ratio, and they are grouped by wether the school is public or private. Shows us that schools with higher student faculty ratio's tend to have lower in-state tuition costs. also private schools seem to have lower student facult ratio's then public schools (but there are some outliers)**
+## Model Performance
+### Feature Selection
+**I decided to chose these features...**
+1. Public (1)/ Private (2)
+2. board
+3. Graduation rate
+4. % new stud. from top 10%
+5. % new stud. from top 25%
+6. room
+7. stud./fac. ratio
+I chose them as they correlated strongly with the target variable (In-State Tuition) with about being *HEAVILY* related (Like the out-of-state tuition).
+### Model Selection
+**I chose several models...**
+1. Linear Regression
+2. Decission Tree Regressor
+3. Random Forest Regressor
+4. K Nearest Neighbors Regressor
+**chose these because i'm used to using them**
+### Evaluation Metrics
+
+| Model             | RMSE     | R²       |MAPE|
+|-------------------|----------|----------|------|
+| Linear Regressor |1802.64$|89.551%|26.774%|
+|Decission Tree Regressor|2612.58$|78.051%|33.512%|
+|Random Forest Regressor|1809.52$|89.558%|23.016%|
+|K Nearest Neighbor Regressor|1864.03$|87.077%|63.990%|
+### pickling
+I chose to pickle the random forest model as it had the best R squared score and the best MAPE score. while its rmse was worse then linear regression, it wasn't worse by much, which ads to the reason as to why I chose the randome forest model to pickle
 ## conclusion
-#### my analysis was able to show that graduation rates are affected by many factors, specifically factors such as the State, the student facylty ratio, as well as the tuition price. With these insights, my recommendations to the universities as a whole is to...
-1. staff more individuals within public schools, and/or within private schools that are underperforming
-2. potentially consider staffing within states where the graduation rate is lower (such as New Mexico, Louisiana, and Nevada)
-3. offer more resources to schools that have lower graduation rates, and potentially schools that have lower tuition rates
-#### Other things to consider would be...
-1. How could you model the success of certain private schools within public schools, and underpreforming private schools?
-2. Tuition rates are really high in certain states, would it be possible to lower tuition rates without lowering graduation rates, or are tuition rates correlated with the amount of resources that a college can have access to?
+#### my analysis was able to create a model that is effecctive at developing predictions, it could be used to...
+1. forecast the price of future higher eduaction projects
+2. be used to estimate future prices of pre-existing schools by plugging in projected values

@@ -43,12 +43,15 @@ sub.to_csv('data/cleaned_universities.csv')
 ### key visuals
 #### 1. A heatmap of Correlations of In-State Tuition
 ![heatmap of correlation](Model_Visuals/correlation_of_tuition_and_features.png)
+
 **a heatmap which shows the correlations between different numerical columns, this was helpful when it came to selecting features in order to create the model**
 #### 2. A Scatterplot of Tuition and Board Costs
 ![Scatter plot](Model_Visuals/in_state_tuition_by_board.png) 
+
 **a scatterplot that shows the cost of in-state tuition by the board cost, and they are grouped by wether the school is public or private. shows us that public schools have lower in-state tuition costs than private schools, but the cost betwen the Board isn't to different between public and private schools (private schools do however appear to have a higher board cost on average compared to public schools)**
 #### 3. A Scatterplot of Tuition and Student Faculty Ratio's
 ![scatter plot 2](Model_Visuals/in_state_tuition_by_student_faculty_ratio.png) 
+
 **A Scatterplot showing the cost of in-state tuition by the student faculty ratio, and they are grouped by wether the school is public or private. Shows us that schools with higher student faculty ratio's tend to have lower in-state tuition costs. also private schools seem to have lower student facult ratio's then public schools (but there are some outliers)**
 ## Model Performance
 ### Feature Selection
@@ -60,6 +63,7 @@ sub.to_csv('data/cleaned_universities.csv')
 5. % new stud. from top 25%
 6. room
 7. stud./fac. ratio
+
 I chose them as they correlated strongly with the target variable (In-State Tuition) with about being *HEAVILY* related (Like the out-of-state tuition).
 ### Model Selection
 **I chose several models...**
@@ -67,6 +71,7 @@ I chose them as they correlated strongly with the target variable (In-State Tuit
 2. Decission Tree Regressor
 3. Random Forest Regressor
 4. K Nearest Neighbors Regressor
+
 **chose these because i'm used to using them**
 ### Evaluation Metrics
 
